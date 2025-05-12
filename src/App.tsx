@@ -3,21 +3,26 @@ import { MoviesList } from './components/MoviesList';
 import { NewMovie } from './components/NewMovie';
 import moviesFromServer from './api/movies.json';
 import { useState } from 'react';
+import { Movie } from './types/Movie';
+
+const initialMovies: Movie[] = moviesFromServer.map(film => ({
+  ...film,
+}));
 
 export const App = () => {
-  const [visibleMovies, setVisibleMovies] = useState(moviesFromServer);
+  const [movies, setMovies] = useState(initialMovies);
+
+  function addMovie(movie: Movie) {
+    setMovies(currentMovies => [...currentMovies, movie]);
+  }
 
   return (
     <div className="page">
       <div className="page-content">
-        <MoviesList movies={visibleMovies} />
+        <MoviesList movies={movies} />
       </div>
       <div className="sidebar">
-        <NewMovie
-          onAdd={movie => {
-            setVisibleMovies([...visibleMovies, movie]);
-          }}
-        />
+        <NewMovie onAdd={addMovie} />
       </div>
     </div>
   );
